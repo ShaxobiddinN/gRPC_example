@@ -9,9 +9,13 @@ service Tutorial {
 
     // RollDice rpc
     rpc RollDice (RollDiceRequest) returns (RollDiceResponse) {}
+    rpc HelloMethod (Empty) returns (Hello){} 
 }
   
 message Empty {
+}
+message Hello{
+    string foo=1;
 }
 
 message Pong {
