@@ -26,7 +26,6 @@ type TutorialClient interface {
 	Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Pong, error)
 	// RollDice rpc
 	RollDice(ctx context.Context, in *RollDiceRequest, opts ...grpc.CallOption) (*RollDiceResponse, error)
-	HelloMethod(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Hello, error)
 }
 
 type tutorialClient struct {
@@ -55,15 +54,6 @@ func (c *tutorialClient) RollDice(ctx context.Context, in *RollDiceRequest, opts
 	return out, nil
 }
 
-func (c *tutorialClient) HelloMethod(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Hello, error) {
-	out := new(Hello)
-	err := c.cc.Invoke(ctx, "/Tutorial/HelloMethod", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // TutorialServer is the server API for Tutorial service.
 // All implementations must embed UnimplementedTutorialServer
 // for forward compatibility
@@ -72,7 +62,6 @@ type TutorialServer interface {
 	Ping(context.Context, *Empty) (*Pong, error)
 	// RollDice rpc
 	RollDice(context.Context, *RollDiceRequest) (*RollDiceResponse, error)
-	HelloMethod(context.Context, *Empty) (*Hello, error)
 	mustEmbedUnimplementedTutorialServer()
 }
 
@@ -85,9 +74,6 @@ func (UnimplementedTutorialServer) Ping(context.Context, *Empty) (*Pong, error) 
 }
 func (UnimplementedTutorialServer) RollDice(context.Context, *RollDiceRequest) (*RollDiceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RollDice not implemented")
-}
-func (UnimplementedTutorialServer) HelloMethod(context.Context, *Empty) (*Hello, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method HelloMethod not implemented")
 }
 func (UnimplementedTutorialServer) mustEmbedUnimplementedTutorialServer() {}
 
@@ -138,24 +124,6 @@ func _Tutorial_RollDice_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Tutorial_HelloMethod_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TutorialServer).HelloMethod(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Tutorial/HelloMethod",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TutorialServer).HelloMethod(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Tutorial_ServiceDesc is the grpc.ServiceDesc for Tutorial service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,10 +138,6 @@ var Tutorial_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RollDice",
 			Handler:    _Tutorial_RollDice_Handler,
-		},
-		{
-			MethodName: "HelloMethod",
-			Handler:    _Tutorial_HelloMethod_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
