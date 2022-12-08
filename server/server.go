@@ -4,7 +4,7 @@ import (
 	"log"
 	"net"
 	"grpc_example/proto-gen/dice"
- 	dService "grpc_example/services/dice"
+ 	dService "grpc_example/server/services/dice"
 	 
 
 	"google.golang.org/grpc"

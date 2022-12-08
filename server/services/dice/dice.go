@@ -1,8 +1,9 @@
 package dice
 
 import (
-	"grpc_example/proto-gen/dice"
 	"context"
+	"grpc_example/proto-gen/dice"
+	"log"
 	"math/rand"
 
 	"google.golang.org/grpc"
@@ -31,6 +32,7 @@ func (s *TutorialService) RollDice(ctx context.Context, req *dice.RollDiceReques
 
 //Ping ...
 func (s *TutorialService) Ping(ctx context.Context, req *dice.Empty) (*dice.Pong, error) {
+	log.Println("Pingg")
 	return &dice.Pong{
 		Message: "Ok",
 	}, nil
